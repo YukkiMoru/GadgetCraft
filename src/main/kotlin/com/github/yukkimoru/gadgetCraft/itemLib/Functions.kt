@@ -8,13 +8,23 @@ import org.bukkit.scheduler.BukkitRunnable
 @Suppress("unused")
 class Functions(val plugin: JavaPlugin) {
 	object Equip {
-		const val BOOTS = "boots"
-		const val HELMET = "helmet"
-		const val CHESTPLATE = "chestplate"
-		const val LEGGINGS = "leggings"
+		const val HELMET = 39
+		const val CHESTPLATE = 38
+		const val LEGGINGS = 37
+		const val BOOTS = 36
 	}
 
-	fun isWearingEquip(player: Player, equipment: String, customModelData: Int): Boolean {
+	fun convEquipToID(equip: String): Int {
+		return when (equip) {
+			"BOOTS" -> Equip.BOOTS
+			"HELMET" -> Equip.HELMET
+			"CHESTPLATE" -> Equip.CHESTPLATE
+			"LEGGINGS" -> Equip.LEGGINGS
+			else -> throw IllegalArgumentException("Invalid equipment type: $equip")
+		}
+	}
+
+	fun isWearingEquip(player: Player, equipment: Int, customModelData: Int): Boolean {
 		val item: ItemStack = when (equipment) {
 			Equip.BOOTS -> player.inventory.boots
 			Equip.HELMET -> player.inventory.helmet
