@@ -67,7 +67,8 @@ class DoubleJumper(plugin: JavaPlugin) : Listener {
             val player = event.player
 //            if (debugMode) player.sendMessage("§a[onPlayerInteract]${itemName}が右クリックされました")
             functions.delayTick(1L) {
-                isWearArmor = functions.isWearingEquip(player, Functions.Equip.BOOTS, customModelID)
+                isWearArmor = true
+//                    functions.isWearingEquip(player, Functions.Equip.BOOTS, customModelID)
                 if (isWearArmor) {
                     if (debugMode) player.sendMessage("§a${itemName}を装備しました")
                     isCooldown = true
