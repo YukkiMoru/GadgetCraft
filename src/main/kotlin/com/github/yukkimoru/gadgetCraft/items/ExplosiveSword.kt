@@ -1,6 +1,6 @@
-package com.github.YukkiMoru.gadgetCraft.items
+package com.github.yukkimoru.gadgetCraft.items
 
-import com.github.YukkiMoru.gadgetCraft.itemLib.ItemFactory
+import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

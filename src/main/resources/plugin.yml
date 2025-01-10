@@ -1,6 +1,6 @@
 name: GadgetCraft
 version: '1.0'
-main: com.github.YukkiMoru.gadgetCraft.GadgetCraft
+main: com.github.yukkimoru.gadgetCraft.GadgetCraft
 api-version: '1.21'
 authors: [YukkiMoru]
 website: https://github.com/YukkiMoru

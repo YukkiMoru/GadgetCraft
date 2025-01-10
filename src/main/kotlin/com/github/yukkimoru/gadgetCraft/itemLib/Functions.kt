@@ -1,4 +1,4 @@
-package com.github.YukkiMoru.gadgetCraft.itemLib
+package com.github.yukkimoru.gadgetCraft.itemLib
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

@@ -1,4 +1,4 @@
-package com.github.YukkiMoru.gadgetCraft.items
+package com.github.yukkimoru.gadgetCraft.items
 
 import org.bukkit.Material
 import org.bukkit.event.EventHandler

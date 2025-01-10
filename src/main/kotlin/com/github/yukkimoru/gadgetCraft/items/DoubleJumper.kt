@@ -1,6 +1,6 @@
-package com.github.YukkiMoru.gadgetCraft.items
+package com.github.yukkimoru.gadgetCraft.items
 
-import com.github.YukkiMoru.gadgetCraft.itemLib.Functions
+import com.github.yukkimoru.gadgetCraft.itemLib.Functions
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player

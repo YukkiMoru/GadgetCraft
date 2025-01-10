@@ -1,4 +1,4 @@
-package com.github.YukkiMoru.gadgetCraft.itemLib
+package com.github.yukkimoru.gadgetCraft.itemLib
 
 object NumConv {
     fun intToRoman(num: Int): String {
