@@ -41,5 +41,5 @@ tasks.processResources {
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     archiveFileName.set("GadgetCraft-$version.jar")
-    destinationDirectory.set(layout.buildDirectory.dir("../server/plugins"))
+    destinationDirectory.set(layout.buildDirectory.dir("../GadgetCraftServer/plugins"))
 }

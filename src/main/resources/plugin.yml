@@ -4,3 +4,8 @@ main: com.github.yukkimoru.gadgetCraft.GadgetCraft
 api-version: '1.21'
 authors: [YukkiMoru]
 website: https://github.com/YukkiMoru
+
+commands:
+  gc:
+    description: A command for GadgetCraft plugin
+    usage: /<command>
