@@ -19,16 +19,20 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender is Player) {
+            if (args.isEmpty()) {
+                sender.sendMessage("GadgetCraftのコマンドが使用可能です")
+                return false
+            }
             when (args[0]) {
                 "gui" -> {
                     when (args[1]) {
                         "util" -> {
                             sender.sendMessage("Utility GUI opened")
-                            val inventory = Interface.shopPickaxe()
+                            val inventory = Interface.shopPickaxe(sender)
                             sender.openInventory(inventory)
                         }
                         "pickaxe" -> {
-
+                            // pickaxeの処理
                         }
                         else -> sender.sendMessage("無効な引数です")
                     }

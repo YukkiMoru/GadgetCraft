@@ -1,22 +1,19 @@
 package com.github.yukkimoru.gadgetCraft.commands.gui
 
+import com.github.yukkimoru.gadgetCraft.GadgetCraft
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
 
 class GUIReceiver : Listener {
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        if (event.inventory.viewers.contains(event.whoClicked)) {
-            when (event.view.title) {
-                "GUI" -> handlePickaxeShopGUI(event)
-            }
+        if(GadgetCraft.guiMap[event.whoClicked.uniqueId] == event.inventory) {
+            handlePickaxeShopGUI(event)
         }
     }
 

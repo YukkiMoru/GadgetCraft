@@ -1,24 +1,24 @@
 package com.github.yukkimoru.gadgetCraft.commands.gui
 
+import com.github.yukkimoru.gadgetCraft.GadgetCraft
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.plugin.java.JavaPlugin
 
 @Suppress("SpellCheckingInspection")
 object Interface {
-	private lateinit var plugin: JavaPlugin
 
-	fun initialize(plugin: JavaPlugin) {
-		this.plugin = plugin
-	}
+	fun shopPickaxe(sender: Player): Inventory {
+		val inventorySize = 9 * 3
+		val gui = Bukkit.createInventory(sender, inventorySize, "§bメニュー")
 
-	fun shopPickaxe(): Inventory {
-		val inventorySize = 36
-		val gui = createInventory("GUI", inventorySize)
+		gui.setItem(10, createItem(Material.RECOVERY_COMPASS, 1, "エンダーパック", ChatColor.GREEN))
+		gui.setItem(11, createItem(Material.IRON_BOOTS, 1, "２段ジャンプブーツ", ChatColor.AQUA))
+		gui.setItem(12, createItem(Material.NETHERITE_SWORD, 1, "爆発剣", ChatColor.RED))
 
 //		val ItemFactory = ItemFactory(plugin)
 //
@@ -31,11 +31,8 @@ object Interface {
 
 		addFrames(gui, Material.BLACK_STAINED_GLASS_PANE, inventorySize)
 
+		GadgetCraft.guiMap[sender.uniqueId] = gui
 		return gui
-	}
-
-	private fun createInventory(name: String, size: Int): Inventory {
-		return Bukkit.createInventory(null, size, name)
 	}
 
 	private fun createItem(material: Material, amount: Int, displayName: String, color: ChatColor?): ItemStack {
