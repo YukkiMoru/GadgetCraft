@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import com.github.yukkimoru.gadgetCraft.items.DoubleJumper
 import com.github.yukkimoru.gadgetCraft.items.ExplosiveSword
 import com.github.yukkimoru.gadgetCraft.commands.GCCommand
+import com.github.yukkimoru.gadgetCraft.commands.gui.GUIReceiver
 
 class GadgetCraft : JavaPlugin() {
 
@@ -17,6 +18,10 @@ class GadgetCraft : JavaPlugin() {
 
         // コマンドの登録
         GCCommand(this)
+
+        // GUIの登録
+        server.pluginManager.registerEvents(GUIReceiver(), this)
+
     }
 
     override fun onDisable() {

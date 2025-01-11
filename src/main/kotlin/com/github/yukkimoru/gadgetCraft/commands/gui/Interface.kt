@@ -18,9 +18,9 @@ object Interface {
 
 	fun shopPickaxe(): Inventory {
 		val inventorySize = 36
-		val gui = createInventory("ツルハシの商人", inventorySize)
+		val gui = createInventory("GUI", inventorySize)
 
-//		val toolFactory = ToolFactory(plugin)
+//		val ItemFactory = ItemFactory(plugin)
 //
 //		gui.setItem(10, toolFactory.createPickaxe(200, true))
 //		gui.setItem(11, toolFactory.createPickaxe(201, true))

@@ -1,5 +1,6 @@
 package com.github.yukkimoru.gadgetCraft.commands
 
+import com.github.yukkimoru.gadgetCraft.commands.gui.Interface
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -17,10 +18,25 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        sender.sendMessage("Command executed!")
-        when(args[0]) {
-            "gui" -> sender.sendMessage("gui")
-            else -> sender.sendMessage("無効な引数です")
+        if (sender is Player) {
+            when (args[0]) {
+                "gui" -> {
+                    when (args[1]) {
+                        "util" -> {
+                            sender.sendMessage("Utility GUI opened")
+                            val inventory = Interface.shopPickaxe()
+                            sender.openInventory(inventory)
+                        }
+                        "pickaxe" -> {
+
+                        }
+                        else -> sender.sendMessage("無効な引数です")
+                    }
+                }
+                else -> sender.sendMessage("無効な引数です")
+            }
+        } else {
+            sender.sendMessage("このコマンドはプレイヤーのみが使用できます")
         }
         return true
     }
@@ -35,7 +51,7 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
             when (args.size) {
                 1 -> listOf("gui")
                 2 -> when (args[0].lowercase()) {
-                    "gui" -> listOf("utility", "pickaxe", "potion", "weapon")
+                    "gui" -> listOf("util", "pickaxe", "potion", "weapon")
                     else -> emptyList()
                 }
                 else -> emptyList()
