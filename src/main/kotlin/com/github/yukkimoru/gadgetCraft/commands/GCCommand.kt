@@ -28,7 +28,7 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
                     when (args[1]) {
                         "util" -> {
                             sender.sendMessage("Utility GUI opened")
-                            val inventory = Interface.shopPickaxe(sender)
+                            val inventory = Interface(plugin).shopPickaxe(sender)
                             sender.openInventory(inventory)
                         }
                         "pickaxe" -> {

@@ -1,10 +1,9 @@
 package com.github.yukkimoru.gadgetCraft.itemLib
 
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
+
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
 
 class ItemFactory(private val plugin: Plugin) {
@@ -15,23 +14,24 @@ class ItemFactory(private val plugin: Plugin) {
 		name: String,
 		lore: List<String>,
 		rarity: String,
-		customModelID: Int? = null
+		customModelData: Int? = null
 	): ItemStack {
 		val itemStack = ItemStack(material, amount)
 		val itemMeta = itemStack.itemMeta
+		itemMeta?.setDisplayName(name)
+
+
 		itemMeta?.setDisplayName(name)
 		if (itemMeta != null) {
 			itemMeta.lore = lore + RarityUtil.getInfo(rarity).section
 		}
 
-		// Add rarity to the item
-		val key = NamespacedKey(plugin, "rarity")
-		itemMeta?.persistentDataContainer?.set(key, PersistentDataType.STRING, rarity)
-
 		// Add custom model data if provided
-		customModelID?.let {
+		customModelData?.let {
 			itemMeta?.setCustomModelData(it)
 		}
+
+
 
 		itemStack.itemMeta = itemMeta
 		return itemStack

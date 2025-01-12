@@ -18,7 +18,7 @@ class GUIReceiver : Listener {
     }
 
     private fun handlePickaxeShopGUI(event: InventoryClickEvent) {
-        event.isCancelled = true
+//        event.isCancelled = true
         when (event.slot) {
             10 -> purchasePickaxe(event, 200)
             11 -> purchasePickaxe(event, 201)

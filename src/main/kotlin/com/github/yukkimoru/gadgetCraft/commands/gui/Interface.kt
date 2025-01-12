@@ -1,6 +1,7 @@
 package com.github.yukkimoru.gadgetCraft.commands.gui
 
 import com.github.yukkimoru.gadgetCraft.GadgetCraft
+import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -8,9 +9,10 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.plugin.Plugin
 
 @Suppress("SpellCheckingInspection")
-object Interface {
+class Interface(private val plugin: Plugin) {
 
 	fun shopPickaxe(sender: Player): Inventory {
 		val inventorySize = 9 * 3
@@ -19,15 +21,9 @@ object Interface {
 		gui.setItem(10, createItem(Material.RECOVERY_COMPASS, 1, "エンダーパック", ChatColor.GREEN))
 		gui.setItem(11, createItem(Material.IRON_BOOTS, 1, "２段ジャンプブーツ", ChatColor.AQUA))
 		gui.setItem(12, createItem(Material.NETHERITE_SWORD, 1, "爆発剣", ChatColor.RED))
+		gui.setItem(13, createItem(Material.DIAMOND_PICKAXE, 1, "採掘ツール", ChatColor.LIGHT_PURPLE))
 
-//		val ItemFactory = ItemFactory(plugin)
-//
-//		gui.setItem(10, toolFactory.createPickaxe(200, true))
-//		gui.setItem(11, toolFactory.createPickaxe(201, true))
-//		gui.setItem(12, toolFactory.createPickaxe(202, true))
-//
-//		gui.setItem(19, toolFactory.createPickaxe(300, true))
-//		gui.setItem(20, toolFactory.createPickaxe(301, true))
+		gui.setItem(14, ItemFactory(plugin).createItemStack(Material.RED_DYE, 1, "§r採掘ツール", listOf("§r採掘ツールの説明"), "1000", 1))
 
 		addFrames(gui, Material.BLACK_STAINED_GLASS_PANE, inventorySize)
 
