@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.github.yukkimoru.gadgetCraft.itemLib
 
 import de.tr7zw.nbtapi.NBTItem
@@ -5,7 +7,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class ItemFactory {
+object GadgetCraftItem{
 	data class Item(
 		val material: Material,
 		val name: String,
@@ -33,13 +35,16 @@ class ItemFactory {
 			price = 100,
 		)
 	)
+}
+
+class ItemFactory {
 
 	fun createItemStack(
 		gadgetCraftID: Int,
 		displayMode: Boolean,
 	): ItemStack {
 		// get item data using gadgetCraftID
-		val itemData = Gadgets[gadgetCraftID] ?: return ItemStack(Material.AIR)
+		val itemData = GadgetCraftItem.Gadgets[gadgetCraftID] ?: return ItemStack(Material.AIR)
 
 		val itemStack = ItemStack(itemData.material, 1) // Assuming amount is 1
 		val itemMeta = itemStack.itemMeta
@@ -60,7 +65,7 @@ class ItemFactory {
 		// Add gadgetCraftID as NBT tag
 		val nbtItem = NBTItem(itemStack)
 		nbtItem.setInteger("gadgetCraftID", gadgetCraftID)
-		nbtItem.setInteger("price", Gadgets[gadgetCraftID]?.price)
+		nbtItem.setInteger("price", GadgetCraftItem.Gadgets[gadgetCraftID]?.price)
 
 		return nbtItem.item
 	}
@@ -85,6 +90,6 @@ class ItemFactory {
 	}
 
 	fun getGadgetCraftItemName(gadgetCraftID: Int): String? {
-		return Gadgets[gadgetCraftID]?.name
+		return GadgetCraftItem.Gadgets[gadgetCraftID]?.name
 	}
 }
