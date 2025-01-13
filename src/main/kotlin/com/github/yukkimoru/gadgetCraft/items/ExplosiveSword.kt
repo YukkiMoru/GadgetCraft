@@ -8,18 +8,28 @@ import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.plugin.java.JavaPlugin
 import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 
+class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
+	companion object {
+		private var instance: ExplosiveSword? = null
 
-class ExplosiveSword(plugin: JavaPlugin) : Listener {
+		fun getInstance(plugin: JavaPlugin): ExplosiveSword {
+			if (instance == null) {
+				instance = ExplosiveSword(plugin)
+			}
+			return instance!!
+		}
+	}
+
 	private val functions = Functions(plugin)
-	private val itemFactory = ItemFactory()
-	private var isHoldItem:Boolean = false
-	private var isCooldown:Boolean = false
-	private val debugMode:Boolean = false
+	private val itemFactory = ItemFactory.getInstance()
+	private var isHoldItem: Boolean = false
+	private var isCooldown: Boolean = false
+	private val debugMode: Boolean = false
 
-	private val cooldown:Long = 20L // 20 ticks = 1 second
+	private val cooldown: Long = 20L // 20 ticks = 1 second
 	private val gadgetCraftID = 1
 
-	// get form ItemFactory using gadgetCraftID
+	// gadgetCraftIDからアイテムデータの取得
 	private val itemName = itemFactory.getGadgetCraftItemName(gadgetCraftID)
 
 	@EventHandler

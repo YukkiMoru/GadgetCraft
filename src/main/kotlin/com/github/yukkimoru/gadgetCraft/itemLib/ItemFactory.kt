@@ -24,7 +24,7 @@ object GadgetCraftItem{
 			lore = listOf("強力な爆発を引き起こす剣"),
 			rarity = "rare",
 			customModelData = 1,
-			price = 100,
+			price = 5000000,
 		),
 		2 to Item(
 			material = Material.IRON_BOOTS,
@@ -32,12 +32,31 @@ object GadgetCraftItem{
 			lore = listOf("2段ジャンプブーツ"),
 			rarity = "common",
 			customModelData = 1,
-			price = 100,
+			price = 1000000,
+		),
+		3 to Item(
+			material = Material.RECOVERY_COMPASS,
+			name = "エンダーパック",
+			lore = listOf("エンダーパック"),
+			rarity = "common",
+			customModelData = 1,
+			price = 300000,
 		)
 	)
 }
 
 class ItemFactory {
+
+	companion object {
+		private var instance: ItemFactory? = null
+
+		fun getInstance(): ItemFactory {
+			if (instance == null) {
+				instance = ItemFactory()
+			}
+			return instance!!
+		}
+	}
 
 	fun createItemStack(
 		gadgetCraftID: Int,

@@ -20,7 +20,7 @@ class GadgetCraft : JavaPlugin() {
         // イベントリスナーの登録
 //        server.pluginManager.registerEvents(DoubleJumper(this), this)
 //        server.pluginManager.registerEvents(EnderPack(this), this)
-        server.pluginManager.registerEvents(ExplosiveSword(this), this)
+        server.pluginManager.registerEvents(ExplosiveSword.getInstance(this), this)
 
         // コマンドの登録
         GCCommand(this)
