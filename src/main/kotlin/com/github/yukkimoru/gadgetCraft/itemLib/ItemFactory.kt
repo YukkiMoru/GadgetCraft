@@ -1,12 +1,11 @@
 package com.github.yukkimoru.gadgetCraft.itemLib
 
+import de.tr7zw.nbtapi.NBTItem
 import org.bukkit.Material
-
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.plugin.Plugin
 
-class ItemFactory(private val plugin: Plugin) {
+class ItemFactory() {
 
 	fun createItemStack(
 		material: Material,
@@ -14,14 +13,13 @@ class ItemFactory(private val plugin: Plugin) {
 		name: String,
 		lore: List<String>,
 		rarity: String,
-		customModelData: Int? = null
+		customModelData: Int? = null,
+		gadgetCraftID: Int
 	): ItemStack {
 		val itemStack = ItemStack(material, amount)
 		val itemMeta = itemStack.itemMeta
 		itemMeta?.setDisplayName(name)
 
-
-		itemMeta?.setDisplayName(name)
 		if (itemMeta != null) {
 			itemMeta.lore = lore + RarityUtil.getInfo(rarity).section
 		}
@@ -31,19 +29,19 @@ class ItemFactory(private val plugin: Plugin) {
 			itemMeta?.setCustomModelData(it)
 		}
 
-
-
+		// Set the item meta
 		itemStack.itemMeta = itemMeta
-		return itemStack
+
+		// Add gadgetCraftID as NBT tag
+		val nbtItem = NBTItem(itemStack)
+		nbtItem.setInteger("gadgetCraftID", gadgetCraftID)
+
+		return nbtItem.item
 	}
 
-	// カスタムモデルデータ(ID)を取得、ない場合はnullを返す
-	fun getCustomModelData(item: ItemStack): Int? {
-		val meta: ItemMeta = item.itemMeta ?: return null
-		return if (meta.hasCustomModelData()) meta.customModelData else null
-	}
-
-	fun isItemWithCustomModelData(item: ItemStack, modelData: Int): Boolean {
-		return getCustomModelData(item) == modelData
+	fun getMainHandItemGadgetCraftID(player: Player): Int? {
+		val itemInMainHand = player.inventory.itemInMainHand
+		val nbtItem = NBTItem(itemInMainHand)
+		return if (nbtItem.hasKey("gadgetCraftID")) nbtItem.getInteger("gadgetCraftID") else null
 	}
 }

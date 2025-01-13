@@ -1,5 +1,6 @@
 package com.github.yukkimoru.gadgetCraft.commands
 
+import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 import com.github.yukkimoru.gadgetCraft.commands.gui.Interface
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -36,6 +37,12 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
                         }
                         else -> sender.sendMessage("無効な引数です")
                     }
+                }
+                "test" -> {
+                    //get gadgetCraftID
+                    val itemFactory = ItemFactory()
+                    val itemID = itemFactory.getMainHandItemGadgetCraftID(sender)
+                    sender.sendMessage("GadgetCraftID: $itemID")
                 }
                 else -> sender.sendMessage("無効な引数です")
             }

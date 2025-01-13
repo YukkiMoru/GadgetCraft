@@ -18,11 +18,12 @@ class DoubleJumper(plugin: JavaPlugin) : Listener {
     private val functions = Functions(plugin)
     private var isWearArmor: Boolean = false
     private var isCooldown: Boolean = false
+    private val debugMode: Boolean = true
 
     private val itemName = "2段ジャンプ"
-    private val customModelID = 301
     private val cooldown: Long = 3000L // 1000L = 1 seconds
-    private val debugMode: Boolean = true
+    private val customModelData = 1
+    private val gadgetCraftID = 2
 
 
     @EventHandler
@@ -54,7 +55,6 @@ class DoubleJumper(plugin: JavaPlugin) : Listener {
 		if(debugMode)player.sendMessage("§a[onInventoryClick]slotType:${event.slotType}, slot:${event.slot}")
 		if (event.slotType == InventoryType.SlotType.ARMOR
             && functions.convEquipToID("BOOTS") == event.slot) {
-            isWearArmor = functions.isWearingEquip(player, Functions.Equip.BOOTS, customModelID)
 			functions.delayTick(1L) {
 //                getAction(player, isWearArmor)
 			}

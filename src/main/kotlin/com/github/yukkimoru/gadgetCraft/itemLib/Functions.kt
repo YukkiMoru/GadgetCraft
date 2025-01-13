@@ -24,38 +24,11 @@ class Functions(val plugin: JavaPlugin) {
 		}
 	}
 
-	fun isWearingEquip(player: Player, equipment: Int, customModelData: Int): Boolean {
-		val item: ItemStack = when (equipment) {
-			Equip.BOOTS -> player.inventory.boots
-			Equip.HELMET -> player.inventory.helmet
-			Equip.CHESTPLATE -> player.inventory.chestplate
-			Equip.LEGGINGS -> player.inventory.leggings
-			else -> throw IllegalArgumentException("Invalid equipment type: $equipment")
-		} ?: return false
-		return ItemFactory(plugin).isItemWithCustomModelData(item, customModelData)
-	}
-
 	fun delayTick(ticks: Long = 1L, task: () -> Unit) {
 		object : BukkitRunnable() {
 			override fun run() {
 				task()
 			}
 		}.runTaskLater(plugin, ticks)
-	}
-
-	fun runWithCooldown(cooldown: Long, task: () -> Unit) {
-		if (!isRunning) {
-			isRunning = true
-			delayTick(1L) {
-				task()
-				delayTick(cooldown) {
-					isRunning = false
-				}
-			}
-		}
-	}
-
-	companion object {
-		private var isRunning = false
 	}
 }
