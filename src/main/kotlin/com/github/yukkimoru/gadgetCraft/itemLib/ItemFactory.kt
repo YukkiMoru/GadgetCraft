@@ -20,7 +20,7 @@ class ItemFactory {
 			material = Material.DIAMOND_SWORD,
 			name = "爆発剣",
 			lore = listOf("強力な爆発を引き起こす剣"),
-			rarity = "common",
+			rarity = "rare",
 			customModelData = 1,
 			price = 100,
 		),
@@ -43,13 +43,13 @@ class ItemFactory {
 
 		val itemStack = ItemStack(itemData.material, 1) // Assuming amount is 1
 		val itemMeta = itemStack.itemMeta
-		itemMeta?.setDisplayName(itemData.name)
+		itemMeta?.setDisplayName("§r${RarityUtil.getInfo(itemData.rarity).section}§l${itemData.name}")
 
-		if (itemMeta != null) {
-			itemMeta.lore = itemData.lore + RarityUtil.getInfo(itemData.rarity).section
+		itemMeta?.let {
+			it.lore = itemData.lore + RarityUtil.getInfo(itemData.rarity).name
 		}
 
-		// Add custom model data if provided
+		// Add custom model data if provide
 		itemData.customModelData?.let {
 			itemMeta?.setCustomModelData(it)
 		}
