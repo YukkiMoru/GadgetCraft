@@ -17,6 +17,7 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
             tabCompleter = this@GCCommand
         }
     }
+    private val itemFactory = ItemFactory()
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender is Player) {
@@ -38,11 +39,15 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
                         else -> sender.sendMessage("無効な引数です")
                     }
                 }
-                "test" -> {
+                "ID" -> {
                     //get gadgetCraftID
-                    val itemFactory = ItemFactory()
                     val itemID = itemFactory.getMainHandItemGadgetCraftID(sender)
                     sender.sendMessage("GadgetCraftID: $itemID")
+                }
+                "Price" -> {
+                    //get price
+                    val price = itemFactory.getPriceThruHand(sender)
+                    sender.sendMessage("Price: $price")
                 }
                 else -> sender.sendMessage("無効な引数です")
             }
@@ -62,7 +67,9 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
             when (args.size) {
                 1 -> listOf("gui")
                 2 -> when (args[0].lowercase()) {
-                    "gui" -> listOf("util", "pickaxe", "potion", "weapon")
+                    "gui" -> listOf("util")
+                    "ID" -> emptyList()
+                    "Price" -> emptyList()
                     else -> emptyList()
                 }
                 else -> emptyList()

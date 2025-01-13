@@ -6,17 +6,21 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.plugin.java.JavaPlugin
+import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
+
 
 class ExplosiveSword(private val plugin: JavaPlugin) : Listener {
 	private val functions = Functions(plugin)
+	private val itemFactory = ItemFactory()
 	private var isHoldItem:Boolean = false
 	private var isCooldown:Boolean = false
 	private val debugMode:Boolean = true
 
-	private val itemName = "爆発剣"
 	private val cooldown:Long = 1000L // 1000L = 1 seconds
-	private val customModelData = 1
 	private val gadgetCraftID = 1
+
+	// get form ItemFactory using gadgetCraftID
+	private val itemName = itemFactory.getGadgetCraftItemName(gadgetCraftID)
 
 	@EventHandler
 	fun onEntityDamageByEntity(event: EntityDamageByEntityEvent) {

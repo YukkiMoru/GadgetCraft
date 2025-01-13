@@ -3,6 +3,10 @@ package com.github.yukkimoru.gadgetCraft.itemLib
 import java.util.*
 
 object RarityUtil {
+	enum class Rarity {
+		COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, MYTHIC
+	}
+
 	data class RarityInfo(val name: String, val section: String)
 
 	fun getInfo(rarity: String): RarityInfo {
