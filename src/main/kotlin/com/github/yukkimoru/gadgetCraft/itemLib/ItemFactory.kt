@@ -73,6 +73,7 @@ class ItemFactory {
 
 	fun hasMainHandItemGadgetCraftID(player: Player, gadgetCraftID: Int): Boolean {
 		val itemInMainHand = player.inventory.itemInMainHand
+		if(itemInMainHand.type == Material.AIR) return false
 		val nbtItem = NBTItem(itemInMainHand)
 		return nbtItem.hasKey("gadgetCraftID") && nbtItem.getInteger("gadgetCraftID") == gadgetCraftID
 	}

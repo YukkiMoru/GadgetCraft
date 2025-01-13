@@ -9,14 +9,14 @@ import org.bukkit.plugin.java.JavaPlugin
 import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 
 
-class ExplosiveSword(private val plugin: JavaPlugin) : Listener {
+class ExplosiveSword(plugin: JavaPlugin) : Listener {
 	private val functions = Functions(plugin)
 	private val itemFactory = ItemFactory()
 	private var isHoldItem:Boolean = false
 	private var isCooldown:Boolean = false
-	private val debugMode:Boolean = true
+	private val debugMode:Boolean = false
 
-	private val cooldown:Long = 1000L // 1000L = 1 seconds
+	private val cooldown:Long = 20L // 20 ticks = 1 second
 	private val gadgetCraftID = 1
 
 	// get form ItemFactory using gadgetCraftID
@@ -31,7 +31,7 @@ class ExplosiveSword(private val plugin: JavaPlugin) : Listener {
 			isCooldown = true
 			player.velocity = player.location.direction.multiply(-1)
 			entity.world.createExplosion(entity.location, 2.0f, false, false)
-			functions.delayTick(cooldown / 50) {
+			functions.delayTick(cooldown) {
 				if (debugMode) player.sendMessage("§a${itemName}が使用可能")
 				isCooldown = false
 				player.world.playSound(player.location, "entity.allay.hurt", 0.05f, 0.1f)
@@ -46,10 +46,11 @@ class ExplosiveSword(private val plugin: JavaPlugin) : Listener {
 		val player = event.player
 		functions.delayTick(1L) {
 			isHoldItem = itemFactory.hasMainHandItemGadgetCraftID(player, gadgetCraftID)
+			if (debugMode) player.sendMessage("§a${itemName}を装備しています: $isHoldItem")
 			if (isHoldItem) {
 				if (debugMode) player.sendMessage("§a${itemName}を装備しました")
 				isCooldown = true
-				functions.delayTick(cooldown / 50) {
+				functions.delayTick(cooldown) {
 					if (debugMode) player.sendMessage("§a${itemName}の特殊能力が使用可能")
 					player.world.playSound(player.location, "entity.allay.hurt", 0.05f, 0.1f)
 					isCooldown = false
