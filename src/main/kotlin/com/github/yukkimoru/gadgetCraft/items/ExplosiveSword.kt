@@ -45,7 +45,7 @@ class ExplosiveSword(private val plugin: JavaPlugin) : Listener {
 	fun onPlayerItemHeld(event: PlayerItemHeldEvent) {
 		val player = event.player
 		functions.delayTick(1L) {
-			isHoldItem = true
+			isHoldItem = itemFactory.hasMainHandItemGadgetCraftID(player, gadgetCraftID)
 			if (isHoldItem) {
 				if (debugMode) player.sendMessage("§a${itemName}を装備しました")
 				isCooldown = true

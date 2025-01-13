@@ -71,6 +71,12 @@ class ItemFactory {
 		return if (nbtItem.hasKey("gadgetCraftID")) nbtItem.getInteger("gadgetCraftID") else null
 	}
 
+	fun hasMainHandItemGadgetCraftID(player: Player, gadgetCraftID: Int): Boolean {
+		val itemInMainHand = player.inventory.itemInMainHand
+		val nbtItem = NBTItem(itemInMainHand)
+		return nbtItem.hasKey("gadgetCraftID") && nbtItem.getInteger("gadgetCraftID") == gadgetCraftID
+	}
+
 	fun getPriceThruHand(player: Player): Int? {
 		val itemInMainHand = player.inventory.itemInMainHand
 		val nbtItem = NBTItem(itemInMainHand)
