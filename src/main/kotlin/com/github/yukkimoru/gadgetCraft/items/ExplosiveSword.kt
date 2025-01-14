@@ -21,7 +21,7 @@ class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
 	}
 
 	private val functions = Functions(plugin)
-	private val itemFactory = ItemFactory.getInstance()
+	private val itemFactory = ItemFactory
 	private var isHoldItem: Boolean = false
 	private var isCooldown: Boolean = false
 	private val debugMode: Boolean = false

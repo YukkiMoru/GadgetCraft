@@ -17,7 +17,7 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
             tabCompleter = this@GCCommand
         }
     }
-    private val itemFactory = ItemFactory()
+    private val itemFactory = ItemFactory
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender is Player) {

@@ -45,18 +45,7 @@ object GadgetCraftItem{
 	)
 }
 
-class ItemFactory {
-
-	companion object {
-		private var instance: ItemFactory? = null
-
-		fun getInstance(): ItemFactory {
-			if (instance == null) {
-				instance = ItemFactory()
-			}
-			return instance!!
-		}
-	}
+object ItemFactory {
 
 	fun createItemStack(
 		gadgetCraftID: Int,

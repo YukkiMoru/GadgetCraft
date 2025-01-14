@@ -23,7 +23,7 @@ class Interface(private val plugin: Plugin) {
 		gui.setItem(12, createItem(Material.NETHERITE_SWORD, 1, "爆発剣", ChatColor.RED))
 		gui.setItem(13, createItem(Material.DIAMOND_PICKAXE, 1, "採掘ツール", ChatColor.LIGHT_PURPLE))
 
-		gui.setItem(14, ItemFactory().createItemStack(1, true))
+		gui.setItem(14, ItemFactory.createItemStack(1, true))
 
 		addFrames(gui, Material.BLACK_STAINED_GLASS_PANE, inventorySize)
 
