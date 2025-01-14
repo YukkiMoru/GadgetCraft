@@ -48,13 +48,13 @@ object GadgetCraftItem{
 class ItemFactory {
 
 	companion object {
+		@Volatile
 		private var instance: ItemFactory? = null
 
 		fun getInstance(): ItemFactory {
-			if (instance == null) {
-				instance = ItemFactory()
+			return instance ?: synchronized(this) { // プレイヤーが同時にアクセスできるようにする
+				instance ?: ItemFactory().also { instance = it }
 			}
-			return instance!!
 		}
 	}
 
