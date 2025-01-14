@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import com.github.yukkimoru.gadgetCraft.items.ExplosiveSword
 import com.github.yukkimoru.gadgetCraft.commands.GCCommand
 import com.github.yukkimoru.gadgetCraft.commands.gui.GUIReceiver
+import com.github.yukkimoru.gadgetCraft.customBlock.SignBreakListener
+import com.github.yukkimoru.gadgetCraft.customBlock.SignListener
 import org.bukkit.inventory.Inventory
 import java.util.*
 
@@ -28,6 +30,8 @@ class GadgetCraft : JavaPlugin() {
         // GUIの登録
         server.pluginManager.registerEvents(GUIReceiver(), this)
 
+        server.pluginManager.registerEvents(SignListener(this), this)
+        server.pluginManager.registerEvents(SignBreakListener(this), this)
     }
 
     override fun onDisable() {
