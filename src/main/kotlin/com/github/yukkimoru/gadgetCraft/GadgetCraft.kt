@@ -30,5 +30,6 @@ class GadgetCraft : JavaPlugin() {
 
     override fun onDisable() {
         // プラグインのシャットダウンロジック
+        Sqlite.disconnect()
     }
 }
