@@ -13,7 +13,11 @@ class GUIReceiver : Listener {
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         if(GadgetCraft.guiMap[event.whoClicked.uniqueId] == event.inventory) {
-            handlePickaxeShopGUI(event)
+            if (event.view.title == "§bアーマーショップ") {
+                handleArmorShopGUI(event)
+            } else if (event.view.title == "§bメニュー") {
+                handlePickaxeShopGUI(event)
+            }
         }
     }
 
@@ -25,6 +29,16 @@ class GUIReceiver : Listener {
             12 -> purchasePickaxe(event, 202)
             19 -> purchasePickaxe(event, 300)
             20 -> purchasePickaxe(event, 301)
+        }
+    }
+
+    private fun handleArmorShopGUI(event: InventoryClickEvent) {
+        event.isCancelled = true
+        when (event.slot) {
+            9 -> purchaseArmor(event, 100)
+            10 -> purchaseArmor(event, 101)
+            11 -> purchaseArmor(event, 102)
+            12 -> purchaseArmor(event, 103)
         }
     }
 
@@ -51,6 +65,19 @@ class GUIReceiver : Listener {
 //            world?.playSound(player.location, "entity.enderman.teleport", 1.2f, 0.1f)
 //            player.sendMessage("You do not have the required materials!")
 //        }
+        world?.playSound(player.location, "minecraft:block.note_block.pling", 1.2f, 2.0f)
+    }
+
+    private fun purchaseArmor(event: InventoryClickEvent, customModelID: Int) {
+        val world = Bukkit.getWorld("world")
+        val player = event.whoClicked as Player
+        player.sendMessage("You purchased armor!")
+        val playerInventory = player.inventory
+        if (isInventoryFull(playerInventory)) {
+            player.sendMessage("Your inventory is full!")
+            world?.playSound(player.location, "entity.enderman.teleport", 1.2f, 0.1f)
+            return
+        }
         world?.playSound(player.location, "minecraft:block.note_block.pling", 1.2f, 2.0f)
     }
 
