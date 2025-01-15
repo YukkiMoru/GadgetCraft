@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
 @Suppress("SpellCheckingInspection")
-object Interface {
+object GUISender {
 
 	fun shopPickaxe(sender: Player): Inventory {
 		val inventorySize = 9 * 6

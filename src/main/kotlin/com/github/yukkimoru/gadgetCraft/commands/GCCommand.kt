@@ -1,8 +1,8 @@
 package com.github.yukkimoru.gadgetCraft.commands
 
 import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
-import com.github.yukkimoru.gadgetCraft.commands.gui.Interface.shopArmor
-import com.github.yukkimoru.gadgetCraft.commands.gui.Interface.shopPickaxe
+import com.github.yukkimoru.gadgetCraft.commands.gui.GUISender.shopArmor
+import com.github.yukkimoru.gadgetCraft.commands.gui.GUISender.shopPickaxe
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
