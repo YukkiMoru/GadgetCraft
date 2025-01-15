@@ -6,7 +6,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.plugin.java.JavaPlugin
-import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
+import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory.getGadgetCraftItemName
+import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory.hasMainHandItemGadgetCraftID
 
 class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
 	companion object {
@@ -21,7 +22,6 @@ class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
 	}
 
 	private val functions = Functions(plugin)
-	private val itemFactory = ItemFactory
 	private var isHoldItem: Boolean = false
 	private var isCooldown: Boolean = false
 	private val debugMode: Boolean = false
@@ -30,7 +30,7 @@ class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
 	private val gadgetCraftID = 1
 
 	// gadgetCraftIDからアイテムデータの取得
-	private val itemName = itemFactory.getGadgetCraftItemName(gadgetCraftID)
+	private val itemName = getGadgetCraftItemName(gadgetCraftID)
 
 	@EventHandler
 	fun onEntityDamageByEntity(event: EntityDamageByEntityEvent) {
@@ -55,7 +55,7 @@ class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
 	fun onPlayerItemHeld(event: PlayerItemHeldEvent) {
 		val player = event.player
 		functions.delayTick(1L) {
-			isHoldItem = itemFactory.hasMainHandItemGadgetCraftID(player, gadgetCraftID)
+			isHoldItem = hasMainHandItemGadgetCraftID(player, gadgetCraftID)
 			if (debugMode) player.sendMessage("§a${itemName}を装備しています: $isHoldItem")
 			if (isHoldItem) {
 				if (debugMode) player.sendMessage("§a${itemName}を装備しました")
