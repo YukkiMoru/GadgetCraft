@@ -1,5 +1,6 @@
 package com.github.yukkimoru.gadgetCraft.commands
 
+import com.github.yukkimoru.gadgetCraft.Economy.EconomyManager
 import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 import com.github.yukkimoru.gadgetCraft.commands.gui.GUISender.shopArmor
 import com.github.yukkimoru.gadgetCraft.commands.gui.GUISender.shopPickaxe
@@ -9,6 +10,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import java.util.*
 
 class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
 
@@ -35,6 +37,9 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
             "gui" -> handleGuiCommand(sender, args)
             "id" -> handleIdCommand(sender)
             "price" -> handlePriceCommand(sender)
+            "eco" -> {
+                handleEconomyCommand(sender, args)
+            }
             else -> sender.sendMessage("無効な引数です")
         }
         return true
@@ -89,5 +94,34 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
     private fun handlePriceCommand(sender: Player) {
         val price = itemFactory.getPriceThruHand(sender)
         sender.sendMessage("Price: $price")
+    }
+
+    private fun handleEconomyCommand(sender: Player, args: Array<String>) {
+        if (args.size < 2) {
+            sender.sendMessage("無効な引数です")
+            return
+        }
+
+        val senderUUID = getTargetUUID(sender)
+
+        when (args[1].lowercase()) {
+            "balance" -> {
+                val balance = EconomyManager.getBalance(senderUUID)
+                sender.sendMessage("あなたの所持金は${balance}です。")
+            }
+            "set" -> {
+                if(args.size < 3) {
+                    sender.sendMessage("/gc eco set <金額>")
+                    return
+                }
+                val balance = EconomyManager.setBalance(senderUUID, args[2].toDouble())
+                sender.sendMessage("所持金を${balance}にしました。")
+            }
+            else -> sender.sendMessage("無効な引数です")
+        }
+    }
+
+    private fun getTargetUUID(player: Player): UUID {
+        return player.uniqueId
     }
 }

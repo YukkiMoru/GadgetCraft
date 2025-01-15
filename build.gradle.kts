@@ -23,6 +23,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.14.1")
+    implementation("org.xerial:sqlite-jdbc:3.47.2.0")
 }
 
 val targetJavaVersion = 21
