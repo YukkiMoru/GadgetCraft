@@ -6,11 +6,11 @@ import java.util.UUID
 
 object BlockManager {
 
-	fun setLocation(uuid: UUID,location: Location,mechanic: String): Double {
-		return Sqlite.getBalance(uuid)
+	fun setMechanicLocation(uuid: UUID, location: String, mechanic: String) {
+		Sqlite.setMechanics(uuid, mechanic, location)
 	}
 
-	fun getBalance(uuid: UUID, balance: Double) {
-		Sqlite.setBalance(uuid, balance)
+	fun getMechanicLocation(uuid: UUID, location: Location, mechanic: String): Double {
+		return Sqlite.getBalance(uuid)
 	}
 }

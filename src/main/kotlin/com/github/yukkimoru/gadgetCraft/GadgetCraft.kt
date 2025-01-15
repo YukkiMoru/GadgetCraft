@@ -25,7 +25,7 @@ class GadgetCraft : JavaPlugin() {
         GCCommand(this)
         server.pluginManager.registerEvents(GUIReceiver(), this)
         server.pluginManager.registerEvents(SignListener(this), this)
-        server.pluginManager.registerEvents(SignBreakListener(this), this)
+        server.pluginManager.registerEvents(SignBreakListener(), this)
     }
 
     override fun onDisable() {

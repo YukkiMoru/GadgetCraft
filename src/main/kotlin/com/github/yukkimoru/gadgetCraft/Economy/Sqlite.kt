@@ -92,6 +92,37 @@ object Sqlite {
 		}
 	}
 
+	@Synchronized
+	fun setMechanics(uuid: UUID, mechanic: String, location: String) {
+		val sql = """
+			INSERT INTO BlockMechanics (uuid, Mechanics, location) VALUES (?, ?, ?)
+			ON CONFLICT(uuid) DO UPDATE SET Mechanics = excluded.Mechanics, location = excluded.location
+		""".trimIndent()
+		try {
+			val statement: PreparedStatement = connection!!.prepareStatement(sql)
+			statement.setString(1, uuid.toString())
+			statement.setString(2, mechanic)
+			statement.setString(3, location)
+			statement.executeUpdate()
+		} catch (e: SQLException) {
+			e.printStackTrace()
+		}
+	}
+
+	@Synchronized
+	fun getMechanics(uuid: UUID): String {
+		val sql = "SELECT Mechanics FROM BlockMechanics WHERE uuid = ?"
+		return try {
+			val statement: PreparedStatement = connection!!.prepareStatement(sql)
+			statement.setString(1, uuid.toString())
+			val resultSet = statement.executeQuery()
+			if (resultSet.next()) resultSet.getString("Mechanics") else ""
+		} catch (e: SQLException) {
+			e.printStackTrace()
+			""
+		}
+	}
+
 	private fun executeUpdate(sql: String) {
 		try {
 			connection?.createStatement()?.executeUpdate(sql)
