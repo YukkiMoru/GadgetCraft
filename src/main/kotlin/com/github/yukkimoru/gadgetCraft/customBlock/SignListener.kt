@@ -13,7 +13,7 @@ class SignListener(private val plugin: JavaPlugin) : Listener {
 		val lines = event.lines
 
 		// 一行目に特定の文字が含まれているかチェック
-		if (lines[0].equals("特定の文字", ignoreCase = true)) {
+		if (lines[0].equals("economy", ignoreCase = true)) {
 			// イベントを発生させる処理
 			player.sendMessage("特定の文字が入力されました！")
 			// ここに他のイベント処理を追加

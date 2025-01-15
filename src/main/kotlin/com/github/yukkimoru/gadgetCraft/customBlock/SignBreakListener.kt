@@ -19,7 +19,7 @@ class SignBreakListener(private val plugin: JavaPlugin) : Listener {
 			val lines = sign.lines
 
 			// 一行目に特定の文字が含まれているかチェック
-			if (lines[0].equals("特定の文字", ignoreCase = true)) {
+			if (lines[0].equals("economy", ignoreCase = true)) {
 				// 看板が撤去されたときの処理
 				player.sendMessage("特定の文字が含まれた看板が撤去されました！")
 				// ここに他のイベント処理を追加
