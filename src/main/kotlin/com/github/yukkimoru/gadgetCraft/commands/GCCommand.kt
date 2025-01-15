@@ -114,8 +114,9 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
                     sender.sendMessage("/gc eco set <金額>")
                     return
                 }
-                val balance = EconomyManager.setBalance(senderUUID, args[2].toDouble())
-                sender.sendMessage("所持金を${balance}にしました。")
+                EconomyManager.setBalance(senderUUID, args[2].toDouble())
+                val balance = EconomyManager.getBalance(senderUUID)
+                sender.sendMessage("あなたの所持金は${balance}です。")
             }
             else -> sender.sendMessage("無効な引数です")
         }

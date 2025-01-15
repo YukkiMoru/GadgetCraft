@@ -1,5 +1,6 @@
 package com.github.yukkimoru.gadgetCraft.Economy
 
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
@@ -15,6 +16,8 @@ object Sqlite {
 	}
 
 	fun connect() {
+		val dbFile = File("plugins/GadgetCraft/economy.db")
+		dbFile.parentFile.mkdirs() // ディレクトリが存在しない場合は作成
 		connection = DriverManager.getConnection(DB_URL)
 	}
 
