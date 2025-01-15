@@ -9,13 +9,12 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.plugin.Plugin
 
 @Suppress("SpellCheckingInspection")
-class Interface(private val plugin: Plugin) {
+object Interface {
 
 	fun shopPickaxe(sender: Player): Inventory {
-		val inventorySize = 9 * 3
+		val inventorySize = 9 * 6
 		val gui = Bukkit.createInventory(sender, inventorySize, "§bメニュー")
 
 		gui.setItem(10, createItem(Material.RECOVERY_COMPASS, 1, "エンダーパック", ChatColor.GREEN))
@@ -26,6 +25,21 @@ class Interface(private val plugin: Plugin) {
 		gui.setItem(14, ItemFactory.createItemStack(1, true))
 
 		addFrames(gui, Material.BLACK_STAINED_GLASS_PANE, inventorySize)
+
+		GadgetCraft.guiMap[sender.uniqueId] = gui
+		return gui
+	}
+
+	fun shopArmor(sender: Player): Inventory {
+		val inventorySize = 9 * 3
+		val gui = Bukkit.createInventory(sender, inventorySize, "§bアーマーショップ")
+
+		gui.setItem(9, createItem(Material.DIAMOND_HELMET, 1, "ダイヤモンドヘルメット", ChatColor.BLUE))
+		gui.setItem(10, createItem(Material.DIAMOND_CHESTPLATE, 1, "ダイヤモンドチェストプレート", ChatColor.BLUE))
+		gui.setItem(11, createItem(Material.DIAMOND_LEGGINGS, 1, "ダイヤモンドレギンス", ChatColor.BLUE))
+		gui.setItem(12, createItem(Material.DIAMOND_BOOTS, 1, "ダイヤモンドブーツ", ChatColor.BLUE))
+
+		addFramesT(gui, Material.BLACK_STAINED_GLASS_PANE, inventorySize)
 
 		GadgetCraft.guiMap[sender.uniqueId] = gui
 		return gui
@@ -57,13 +71,33 @@ class Interface(private val plugin: Plugin) {
 		}
 	}
 
-	private fun addTFrame(gui: Inventory, material: Material, size: Int) {
+	private fun addFramesT(gui: Inventory, material: Material, size: Int) {
 		for (i in 0..8) {
 			gui.setItem(i, createItem(material, 1, "", ChatColor.BLACK))
 		}
-		val slots = listOf(13, 22, 31, 40, 49)
-		for (slot in slots) {
-			gui.setItem(slot, createItem(material, 1, "", ChatColor.BLACK))
+		if(size==27){
+			val slots = listOf(13, 22)
+			for (slot in slots) {
+				gui.setItem(slot, createItem(material, 1, "", ChatColor.BLACK))
+			}
+		}
+		if(size==36){
+			val slots = listOf(13, 22, 31)
+			for (slot in slots) {
+				gui.setItem(slot, createItem(material, 1, "", ChatColor.BLACK))
+			}
+		}
+		if(size==45){
+			val slots = listOf(13, 22, 31, 40)
+			for (slot in slots) {
+				gui.setItem(slot, createItem(material, 1, "", ChatColor.BLACK))
+			}
+		}
+		if(size==54){
+			val slots = listOf(13, 22, 31, 40, 49)
+			for (slot in slots) {
+				gui.setItem(slot, createItem(material, 1, "", ChatColor.BLACK))
+			}
 		}
 	}
 }

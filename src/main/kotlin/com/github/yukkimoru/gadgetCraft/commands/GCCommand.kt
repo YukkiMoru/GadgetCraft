@@ -1,7 +1,8 @@
 package com.github.yukkimoru.gadgetCraft.commands
 
 import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
-import com.github.yukkimoru.gadgetCraft.commands.gui.Interface
+import com.github.yukkimoru.gadgetCraft.commands.gui.Interface.shopArmor
+import com.github.yukkimoru.gadgetCraft.commands.gui.Interface.shopPickaxe
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -9,7 +10,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
-class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter {
+class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
 
     init {
         plugin.getCommand("gc")?.apply {
@@ -20,39 +21,21 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
     private val itemFactory = ItemFactory
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        if (sender is Player) {
-            if (args.isEmpty()) {
-                sender.sendMessage("GadgetCraftのコマンドが使用可能です")
-                return false
-            }
-            when (args[0]) {
-                "gui" -> {
-                    when (args[1]) {
-                        "util" -> {
-                            sender.sendMessage("Utility GUI opened")
-                            val inventory = Interface(plugin).shopPickaxe(sender)
-                            sender.openInventory(inventory)
-                        }
-                        "pickaxe" -> {
-                            // pickaxeの処理
-                        }
-                        else -> sender.sendMessage("無効な引数です")
-                    }
-                }
-                "ID" -> {
-                    //get gadgetCraftID
-                    val itemID = itemFactory.getMainHandItemGadgetCraftID(sender)
-                    sender.sendMessage("GadgetCraftID: $itemID")
-                }
-                "Price" -> {
-                    //get price
-                    val price = itemFactory.getPriceThruHand(sender)
-                    sender.sendMessage("Price: $price")
-                }
-                else -> sender.sendMessage("無効な引数です")
-            }
-        } else {
+        if (sender !is Player) {
             sender.sendMessage("このコマンドはプレイヤーのみが使用できます")
+            return true
+        }
+
+        if (args.isEmpty()) {
+            sender.sendMessage("GadgetCraftのコマンドが使用可能です")
+            return false
+        }
+
+        when (args[0].lowercase()) {
+            "gui" -> handleGuiCommand(sender, args)
+            "id" -> handleIdCommand(sender)
+            "price" -> handlePriceCommand(sender)
+            else -> sender.sendMessage("無効な引数です")
         }
         return true
     }
@@ -75,5 +58,36 @@ class GCCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter 
                 else -> emptyList()
             }
         } else null
+    }
+
+    private fun handleGuiCommand(sender: Player, args: Array<String>) {
+        if (args.size < 2) {
+            sender.sendMessage("無効な引数です")
+            return
+        }
+
+        when (args[1].lowercase()) {
+            "util" -> {
+                sender.sendMessage("ユーティリティGUIを開きました")
+                val inventory = shopPickaxe(sender)
+                sender.openInventory(inventory)
+            }
+            "armor" -> {
+                sender.sendMessage("防具GUIを開きました")
+                val inventory = shopArmor(sender)
+                sender.openInventory(inventory)
+            }
+            else -> sender.sendMessage("無効な引数です")
+        }
+    }
+
+    private fun handleIdCommand(sender: Player) {
+        val itemID = itemFactory.getMainHandItemGadgetCraftID(sender)
+        sender.sendMessage("GadgetCraftID: $itemID")
+    }
+
+    private fun handlePriceCommand(sender: Player) {
+        val price = itemFactory.getPriceThruHand(sender)
+        sender.sendMessage("Price: $price")
     }
 }
