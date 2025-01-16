@@ -24,7 +24,7 @@ class GadgetCraft : JavaPlugin() {
         server.pluginManager.registerEvents(ExplosiveSword.getInstance(this), this)
         GCCommand(this)
         server.pluginManager.registerEvents(GUIReceiver(), this)
-        server.pluginManager.registerEvents(SignListener(this), this)
+        server.pluginManager.registerEvents(SignListener(), this)
         server.pluginManager.registerEvents(SignBreakListener(), this)
     }
 

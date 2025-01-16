@@ -1,4 +1,4 @@
-package com.github.yukkimoru.gadgetCraft.BlockManager
+package com.github.yukkimoru.gadgetCraft.customBlock
 
 import com.github.yukkimoru.gadgetCraft.Economy.Sqlite
 import org.bukkit.Location
