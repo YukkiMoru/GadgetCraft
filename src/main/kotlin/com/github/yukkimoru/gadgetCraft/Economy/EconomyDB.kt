@@ -7,21 +7,20 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.util.UUID
 
-object Sqlite {
-	private const val DB_URL = "jdbc:sqlite:plugins/GadgetCraft/economy.db"
+object EconomyDB {
+	private const val DB_URL = "jdbc:sqlite:plugins/GadgetCraft/Economy.db"
 	private var connection: Connection? = null
 
 	init {
 		connect()
 		createTableEconomy()
-		createTableMechanic()
 	}
 
 	@Synchronized
 	fun connect() {
 		if (connection == null || connection!!.isClosed) {
 			try {
-				val dbFile = File("plugins/GadgetCraft/economy.db")
+				val dbFile = File("plugins/GadgetCraft/Economy.db")
 				dbFile.parentFile.mkdirs() // ディレクトリが存在しない場合は作成
 				connection = DriverManager.getConnection(DB_URL)
 			} catch (e: SQLException) {
@@ -43,7 +42,7 @@ object Sqlite {
 
 	private fun createTableEconomy() {
 		val sql = """
-            CREATE TABLE IF NOT EXISTS economy (
+            CREATE TABLE IF NOT EXISTS VALUT (
                 uuid TEXT PRIMARY KEY,
                 balance REAL
             )
@@ -51,20 +50,9 @@ object Sqlite {
 		executeUpdate(sql)
 	}
 
-	private fun createTableMechanic() {
-		val sql = """
-            CREATE TABLE IF NOT EXISTS BlockMechanics (
-                uuid TEXT PRIMARY KEY,
-                Mechanics TEXT,
-                location TEXT
-            )
-        """.trimIndent()
-		executeUpdate(sql)
-	}
-
 	@Synchronized
 	fun getBalance(uuid: UUID): Double {
-		val sql = "SELECT balance FROM economy WHERE uuid = ?"
+		val sql = "SELECT balance FROM VALUT WHERE uuid = ?"
 		return try {
 			val statement: PreparedStatement = connection!!.prepareStatement(sql)
 			statement.setString(1, uuid.toString())
@@ -79,7 +67,7 @@ object Sqlite {
 	@Synchronized
 	fun setBalance(uuid: UUID, balance: Double) {
 		val sql = """
-            INSERT INTO economy (uuid, balance) VALUES (?, ?)
+            INSERT INTO VALUT (uuid, balance) VALUES (?, ?)
             ON CONFLICT(uuid) DO UPDATE SET balance = excluded.balance
         """.trimIndent()
 		try {
@@ -89,37 +77,6 @@ object Sqlite {
 			statement.executeUpdate()
 		} catch (e: SQLException) {
 			e.printStackTrace()
-		}
-	}
-
-	@Synchronized
-	fun setMechanics(uuid: UUID, mechanic: String, location: String) {
-		val sql = """
-			INSERT INTO BlockMechanics (uuid, Mechanics, location) VALUES (?, ?, ?)
-			ON CONFLICT(uuid) DO UPDATE SET Mechanics = excluded.Mechanics, location = excluded.location
-		""".trimIndent()
-		try {
-			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
-			statement.setString(2, mechanic)
-			statement.setString(3, location)
-			statement.executeUpdate()
-		} catch (e: SQLException) {
-			e.printStackTrace()
-		}
-	}
-
-	@Synchronized
-	fun getMechanics(uuid: UUID): String {
-		val sql = "SELECT Mechanics FROM BlockMechanics WHERE uuid = ?"
-		return try {
-			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
-			val resultSet = statement.executeQuery()
-			if (resultSet.next()) resultSet.getString("Mechanics") else ""
-		} catch (e: SQLException) {
-			e.printStackTrace()
-			""
 		}
 	}
 
