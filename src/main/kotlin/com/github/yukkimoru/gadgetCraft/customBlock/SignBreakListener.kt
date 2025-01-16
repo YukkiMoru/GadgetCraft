@@ -17,8 +17,6 @@ class SignBreakListener : Listener {
 			if (lines[0].equals("economy", ignoreCase = true)) {
 				player.sendMessage("特定の文字が含まれた看板が撤去されました！")
 
-
-
 			}
 		}
 	}

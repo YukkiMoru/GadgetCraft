@@ -14,7 +14,7 @@ object Sqlite {
 	init {
 		connect()
 		createTableEconomy()
-		createTableShop()
+		createTableMechanic()
 	}
 
 	@Synchronized
@@ -51,7 +51,7 @@ object Sqlite {
 		executeUpdate(sql)
 	}
 
-	private fun createTableShop() {
+	private fun createTableMechanic() {
 		val sql = """
             CREATE TABLE IF NOT EXISTS BlockMechanics (
                 uuid TEXT PRIMARY KEY,

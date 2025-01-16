@@ -18,6 +18,14 @@ object GadgetCraftItem{
 	)
 
 	val Gadgets = mapOf(
+		0 to Item(
+			material = Material.STICK,
+			name = "レンチ",
+			lore = listOf("ギミックブロックを操作するための道具"),
+			rarity = "common",
+			customModelData = 0,
+			price = 1,
+		),
 		1 to Item(
 			material = Material.DIAMOND_SWORD,
 			name = "爆発剣",
