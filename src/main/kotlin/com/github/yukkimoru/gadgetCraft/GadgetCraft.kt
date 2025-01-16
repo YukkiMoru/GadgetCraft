@@ -25,7 +25,7 @@ class GadgetCraft : JavaPlugin() {
         server.pluginManager.registerEvents(ExplosiveSword.getInstance(this), this)
         GCCommand(this)
         server.pluginManager.registerEvents(GUIReceiver(), this)
-        server.pluginManager.registerEvents(CustomListener(this), this)
+        server.pluginManager.registerEvents(CustomListener(), this)
     }
 
     override fun onDisable() {
