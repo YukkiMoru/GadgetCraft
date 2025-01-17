@@ -53,11 +53,12 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
     ): List<String>? {
         return if (sender is Player) {
             when (args.size) {
-                1 -> listOf("gui")
+                1 -> listOf("gui", "id", "price", "eco")
                 2 -> when (args[0].lowercase()) {
-                    "gui" -> listOf("util")
-                    "ID" -> emptyList()
-                    "Price" -> emptyList()
+                    "gui" -> listOf("util", "armor")
+                    "id" -> emptyList()
+                    "price" -> emptyList()
+                    "eco" -> listOf("balance", "set")
                     else -> emptyList()
                 }
                 else -> emptyList()
@@ -117,9 +118,5 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
             }
             else -> sender.sendMessage("無効な引数です")
         }
-    }
-
-    private fun getTargetUUID(player: Player): UUID {
-        return player.uniqueId
     }
 }
