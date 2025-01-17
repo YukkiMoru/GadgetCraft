@@ -54,7 +54,7 @@ object MechanicDB {
 	}
 
 	@Synchronized
-	fun setMechanics(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int) {
+	fun setMechanic(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int) {
 		val sql = """
         INSERT INTO BlockGimmicks (player, mechanics, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(x, y, z) DO UPDATE SET player = excluded.player, mechanics = excluded.mechanics, world = excluded.world
@@ -75,7 +75,7 @@ object MechanicDB {
 	}
 
 	@Synchronized
-	fun removeMechanics(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int) {
+	fun removeMechanic(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int) {
 		val sql = """
             DELETE FROM BlockGimmicks WHERE player = ? AND mechanics = ? AND world = ? AND x = ? AND y = ? AND z = ?
         """.trimIndent()

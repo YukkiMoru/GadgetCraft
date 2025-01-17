@@ -1,4 +1,4 @@
-package com.github.yukkimoru.gadgetCraft.Economy
+package com.github.yukkimoru.gadgetCraft.economy
 
 import java.io.File
 import java.sql.Connection
@@ -43,7 +43,7 @@ object EconomyDB {
 	private fun createTableEconomy() {
 		val sql = """
             CREATE TABLE IF NOT EXISTS VALUT (
-                uuid TEXT PRIMARY KEY,
+                player TEXT PRIMARY KEY,
                 balance REAL
             )
         """.trimIndent()
@@ -51,11 +51,11 @@ object EconomyDB {
 	}
 
 	@Synchronized
-	fun getBalance(uuid: UUID): Double {
-		val sql = "SELECT balance FROM VALUT WHERE uuid = ?"
+	fun getBalance(player: String): Double {
+		val sql = "SELECT balance FROM VALUT WHERE player = ?"
 		return try {
 			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
+			statement.setString(1, player)
 			val resultSet = statement.executeQuery()
 			if (resultSet.next()) resultSet.getDouble("balance") else 0.0
 		} catch (e: SQLException) {
@@ -65,14 +65,14 @@ object EconomyDB {
 	}
 
 	@Synchronized
-	fun setBalance(uuid: UUID, balance: Double) {
+	fun setBalance(player: String, balance: Double) {
 		val sql = """
-            INSERT INTO VALUT (uuid, balance) VALUES (?, ?)
-            ON CONFLICT(uuid) DO UPDATE SET balance = excluded.balance
+            INSERT INTO VALUT (player, balance) VALUES (?, ?)
+            ON CONFLICT(player) DO UPDATE SET balance = excluded.balance
         """.trimIndent()
 		try {
 			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
+			statement.setString(1, player)
 			statement.setDouble(2, balance)
 			statement.executeUpdate()
 		} catch (e: SQLException) {
@@ -88,11 +88,10 @@ object EconomyDB {
 		}
 	}
 
-	fun purchaseItem(player: String, price: Int) {
-		val uuid = UUID.fromString(player)
-		val balance = getBalance(uuid)
+	fun purchase(player: String, price: Int) {
+		val balance = getBalance(player)
 		if (balance >= price) {
-			setBalance(uuid, balance - price)
+			setBalance(player, balance - price)
 		}
 	}
 }

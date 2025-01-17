@@ -1,9 +1,9 @@
 package com.github.yukkimoru.gadgetCraft.customBlock
 
-import com.github.yukkimoru.gadgetCraft.Economy.EconomyDB.purchaseItem
+import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.purchase
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.isMechanicOwner
-import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.removeMechanics
-import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.setMechanics
+import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.removeMechanic
+import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.setMechanic
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -11,7 +11,6 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import kotlin.toString
 
 class CustomListener : Listener {
 
@@ -37,7 +36,7 @@ class CustomListener : Listener {
 				return
 			}
 			player.sendMessage("アイテム名:"+itemName+","+"値段:"+price+"のショップを作りました")
-			setMechanics(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
+			setMechanic(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
 		}
 	}
 
@@ -57,7 +56,7 @@ class CustomListener : Listener {
 					event.isCancelled = true
 					sign.update()
 				}
-				removeMechanics(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
+				removeMechanic(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
 			}
 		}
 	}
@@ -91,7 +90,7 @@ class CustomListener : Listener {
 							return
 						}
 						player.sendMessage("アイテム名:"+lines[1]+","+"値段:"+line2+"で買いました")
-						purchaseItem(player.uniqueId.toString(), line2)
+						purchase(player.name, line2)
 					}
 				}
 			}

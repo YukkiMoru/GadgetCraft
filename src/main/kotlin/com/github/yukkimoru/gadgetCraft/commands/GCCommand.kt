@@ -1,6 +1,6 @@
 package com.github.yukkimoru.gadgetCraft.commands
 
-import com.github.yukkimoru.gadgetCraft.Economy.EconomyDB
+import com.github.yukkimoru.gadgetCraft.economy.EconomyDB
 import com.github.yukkimoru.gadgetCraft.itemLib.ItemFactory
 import com.github.yukkimoru.gadgetCraft.commands.gui.GUISender.shopArmor
 import com.github.yukkimoru.gadgetCraft.commands.gui.GUISender.shopPickaxe
@@ -101,12 +101,9 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
             sender.sendMessage("無効な引数です")
             return
         }
-
-        val senderUUID = getTargetUUID(sender)
-
         when (args[1].lowercase()) {
             "balance" -> {
-                val balance = EconomyDB.getBalance(senderUUID)
+                val balance = EconomyDB.getBalance(sender.name)
                 sender.sendMessage("あなたの所持金は${balance}です。")
             }
             "set" -> {
@@ -114,8 +111,8 @@ class GCCommand(plugin: JavaPlugin) : CommandExecutor, TabCompleter {
                     sender.sendMessage("/gc eco set <金額>")
                     return
                 }
-                EconomyDB.setBalance(senderUUID, args[2].toDouble())
-                val balance = EconomyDB.getBalance(senderUUID)
+                EconomyDB.setBalance(sender.name, args[2].toDouble())
+                val balance = EconomyDB.getBalance(sender.name)
                 sender.sendMessage("あなたの所持金は${balance}です。")
             }
             else -> sender.sendMessage("無効な引数です")

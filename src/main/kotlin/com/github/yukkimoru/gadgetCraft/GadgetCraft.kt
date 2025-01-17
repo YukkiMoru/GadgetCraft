@@ -1,6 +1,6 @@
 package com.github.yukkimoru.gadgetCraft
 
-import com.github.yukkimoru.gadgetCraft.Economy.EconomyDB
+import com.github.yukkimoru.gadgetCraft.economy.EconomyDB
 import org.bukkit.plugin.java.JavaPlugin
 import com.github.yukkimoru.gadgetCraft.items.ExplosiveSword
 import com.github.yukkimoru.gadgetCraft.commands.GCCommand
