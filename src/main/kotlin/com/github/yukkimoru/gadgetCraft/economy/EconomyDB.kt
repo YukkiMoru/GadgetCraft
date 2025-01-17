@@ -94,4 +94,9 @@ object EconomyDB {
 			setBalance(player, balance - price)
 		}
 	}
+
+	fun sale(player: String, price: Int) {
+		val balance = getBalance(player)
+		setBalance(player, balance + price)
+	}
 }

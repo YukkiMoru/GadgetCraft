@@ -4,6 +4,7 @@ import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.purchase
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.isMechanicOwner
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.removeMechanic
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.setMechanic
+import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.sale
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -14,6 +15,8 @@ import org.bukkit.event.player.PlayerInteractEvent
 
 class CustomListener : Listener {
 
+
+
 	@EventHandler
 	fun onSignChange(event: SignChangeEvent) {
 		val player = event.player
@@ -21,12 +24,26 @@ class CustomListener : Listener {
 		val location = event.block.location
 
 		if (lines[0].equals("shop", ignoreCase = true)) {
-			if(lines[1].isEmpty() || lines[2].isEmpty()){
-				player.sendMessage("2行目はアイテム名と3行目は値段")
+			for(i in 0..3){
+				if(lines[0].isEmpty()) {
+					if (i == 0) {
+						player.sendMessage("1行目にはshopを入力してください")
+					}
+					if (i == 1) {
+						player.sendMessage("2行目にはアイテム名を入力してください")
+					}
+					if (i == 2) {
+						player.sendMessage("3行目には値段を入力してください")
+					}
+					if (i == 3) {
+						player.sendMessage("4行目にはbuyまたはsellを入力してください")
+					}
 				return
+				}
 			}
 			val itemName = lines[1].toString()
 			val price = lines[2].toIntOrNull()
+			val buyOrSell = lines[3].toString()
 			if (price == null) {
 				player.sendMessage("3行目には数値を入力してください")
 				return
@@ -35,8 +52,15 @@ class CustomListener : Listener {
 				player.sendMessage("3行目には0以上の数値を入力してください")
 				return
 			}
-			player.sendMessage("アイテム名:"+itemName+","+"値段:"+price+"のショップを作りました")
-			setMechanic(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
+			when (buyOrSell) {
+				"buy" -> player.sendMessage("アイテム名:$itemName, 値段:$price の購入ショップを作りました")
+				"sell" -> player.sendMessage("アイテム名:$itemName, 値段:$price の売却ショップを作りました")
+				else -> {
+					player.sendMessage("4行目にはbuyまたはsellを入力してください")
+					return
+				}
+			}
+			setMechanic(player.name, "shop", player.world.name, location.blockX, location.blockY, location.blockZ)
 		}
 	}
 
@@ -71,26 +95,36 @@ class CustomListener : Listener {
 				val sign = block.state as Sign
 				val lines = sign.lines
 				if (lines[0].equals("shop", ignoreCase = true)) {
-					if(isMechanicOwner(player.name, "shop", player.world.name.toString(), location.blockX.toInt(), location.blockY.toInt(), location.blockZ.toInt())){
+					if(isMechanicOwner(player.name, "shop",
+							player.world.name, location.blockX, location.blockY, location.blockZ
+						)){
 						player.sendMessage("オーナーなので編集が可能です")
-//						player.sendMessage(player.name+" "+player.world.name.toString()+" "+location.blockX.toInt()+" "+location.blockY.toInt()+" "+location.blockZ.toInt())
 					}else{
 						player.sendMessage()
 						event.isCancelled = true
 
-						val line2 = lines[2].toIntOrNull()
-						if (line2 == null) {
-							player.sendMessage("3行目には数値を入力してください")
-							event.isCancelled = true
-							return
+						val itemName = lines[1].toString()
+						val price = lines[2].toIntOrNull()
+						val buyOrSell = lines[3].toString()
+						when (buyOrSell) {
+							"buy" -> {
+								player.sendMessage("アイテム名:$itemName, 値段:$price の購入ショップを作りました")
+								if(price != null){
+									purchase(player.name, price)
+								}
+							}
+							"sell" -> {
+								player.sendMessage("アイテム名:$itemName, 値段:$price の売却ショップを作りました")
+								if(price != null){
+									sale(player.name, price)
+								}
+							}
+							else -> {
+								player.sendMessage("4行目にはbuyまたはsellを入力してください")
+								return
+							}
 						}
-						if(0 > line2){
-							player.sendMessage("3行目には0以上の数値を入力してください")
-							event.isCancelled = true
-							return
-						}
-						player.sendMessage("アイテム名:"+lines[1]+","+"値段:"+line2+"で買いました")
-						purchase(player.name, line2)
+
 					}
 				}
 			}
