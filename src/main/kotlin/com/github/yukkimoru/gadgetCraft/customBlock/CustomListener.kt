@@ -1,16 +1,16 @@
 package com.github.yukkimoru.gadgetCraft.customBlock
 
-import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.purchase
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.isMechanicOwner
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.removeMechanic
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.setMechanic
+import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.purchase
 import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.getBalance
 import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.sale
+import org.bukkit.event.Listener
 import org.bukkit.Material
 import org.bukkit.block.Sign
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.SignChangeEvent
@@ -18,8 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
 class CustomListener : Listener {
-
-
 
 	@EventHandler
 	fun onSignChange(event: SignChangeEvent) {
@@ -37,8 +35,20 @@ class CustomListener : Listener {
 				return
 			}
 			when (buyOrSell) {
-				"buy" -> player.sendMessage("アイテム名:$itemName, 値段:$price の購入ショップを作りました")
-				"sell" -> player.sendMessage("アイテム名:$itemName, 値段:$price の売却ショップを作りました")
+				"buy" -> {
+					player.sendMessage("アイテム名:$itemName, 値段:$price の購入ショップを作りました")
+					lines[0]="§lshop"
+					lines[1]="§l$itemName"
+					lines[2]="§l$price"
+					lines[3]="§4§l$buyOrSell"
+				}
+				"sell" -> {
+					player.sendMessage("アイテム名:$itemName, 値段:$price の売却ショップを作りました")
+					lines[0]="§lshop"
+					lines[1]="§l$itemName"
+					lines[2]="§l$price"
+					lines[3]="§b§l$buyOrSell"
+				}
 				else -> {
 					player.sendMessage("4行目にはbuyまたはsellを入力してください")
 					return
@@ -48,6 +58,7 @@ class CustomListener : Listener {
 			setMechanic(player.name, "shop", player.world.name, location.blockX, location.blockY, location.blockZ)
 		}
 	}
+
 	private fun validateSignLines(player: Player, lines: Array<String>): Boolean {
 		val messages = arrayOf(
 			"2行目にはアイテム名を入力してください",
