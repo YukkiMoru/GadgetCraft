@@ -21,7 +21,7 @@ class CustomListener : Listener {
 
 		if (lines[0].equals("shop", ignoreCase = true)) {
 			player.sendMessage("特定の文字が入力されました！")
-			setMechanics(player.name, "shop", player.world.name.toString(), location.x, location.y, location.z)
+			setMechanics(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
 		}
 	}
 
@@ -34,13 +34,13 @@ class CustomListener : Listener {
 			val lines = sign.lines
 			val location = block.location
 			if (lines[0].equals("shop", ignoreCase = true)) {
-				if(isMechanicOwner(player.name, "shop", player.world.name.toString(), location.x, location.y, location.z) || player.isOp) {
+				if(isMechanicOwner(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ) || player.isOp) {
 					player.sendMessage("特定の文字が入力された看板を破壊しました")
 				} else {
 					player.sendMessage("看板を破壊する権限がありません")
 					event.isCancelled = true
 				}
-				removeMechanics(player.name, "shop", player.world.name.toString(), location.x, location.y, location.z)
+				removeMechanics(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
 			}
 		}
 	}
@@ -55,9 +55,13 @@ class CustomListener : Listener {
 				val sign = block.state as Sign
 				val lines = sign.lines
 				if (lines[0].equals("shop", ignoreCase = true)) {
-					if(isMechanicOwner(player.name, "shop", player.world.name.toString(), location.x, location.y, location.z)){
+					if(isMechanicOwner(player.name, "shop", player.world.name.toString(), location.blockX.toInt(), location.blockY.toInt(), location.blockZ.toInt())){
+						player.sendMessage("オーナーなので編集が可能です")
+//						player.sendMessage(player.name+" "+player.world.name.toString()+" "+location.blockX.toInt()+" "+location.blockY.toInt()+" "+location.blockZ.toInt())
+					}else{
+						player.sendMessage("オーナーではないので編集ができません")
 						event.isCancelled = true
-						player.sendMessage("別のオーナーがいるため、看板を編集する権限がありません")
+						sign.update()
 					}
 				}
 			}

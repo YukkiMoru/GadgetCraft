@@ -54,7 +54,7 @@ object MechanicDB {
 	}
 
 	@Synchronized
-	fun setMechanics(player: String, mechanic: String, world: String, x: Double, y: Double, z: Double) {
+	fun setMechanics(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int) {
 		val sql = """
         INSERT INTO BlockGimmicks (player, mechanics, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(x, y, z) DO UPDATE SET player = excluded.player, mechanics = excluded.mechanics, world = excluded.world
@@ -64,9 +64,9 @@ object MechanicDB {
 				statement.setString(1, player)
 				statement.setString(2, mechanic)
 				statement.setString(3, world)
-				statement.setDouble(4, x)
-				statement.setDouble(5, y)
-				statement.setDouble(6, z)
+				statement.setInt(4, x)
+				statement.setInt(5, y)
+				statement.setInt(6, z)
 				statement.executeUpdate()
 			}
 		} catch (e: SQLException) {
@@ -75,7 +75,7 @@ object MechanicDB {
 	}
 
 	@Synchronized
-	fun removeMechanics(player: String, mechanic: String, world: String, x: Double, y: Double, z: Double) {
+	fun removeMechanics(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int) {
 		val sql = """
             DELETE FROM BlockGimmicks WHERE player = ? AND mechanics = ? AND world = ? AND x = ? AND y = ? AND z = ?
         """.trimIndent()
@@ -84,9 +84,9 @@ object MechanicDB {
 				statement.setString(1, player)
 				statement.setString(2, mechanic)
 				statement.setString(3, world)
-				statement.setDouble(4, x)
-				statement.setDouble(5, y)
-				statement.setDouble(6, z)
+				statement.setInt(4, x)
+				statement.setInt(5, y)
+				statement.setInt(6, z)
 				statement.executeUpdate()
 			}
 		} catch (e: SQLException) {
@@ -95,7 +95,7 @@ object MechanicDB {
 	}
 
 	@Synchronized
-	fun isMechanicOwner(player: String, mechanic: String, world: String, x: Double, y: Double, z: Double): Boolean {
+	fun isMechanicOwner(player: String, mechanic: String, world: String, x: Int, y: Int, z: Int): Boolean {
 		val sql = """
         SELECT mechanics FROM BlockGimmicks
         WHERE player = ? AND world = ? AND x = ? AND y = ? AND z = ? AND mechanics = ?
@@ -104,9 +104,9 @@ object MechanicDB {
 			connection?.prepareStatement(sql)?.use { statement ->
 				statement.setString(1, player)
 				statement.setString(2, world)
-				statement.setDouble(3, x)
-				statement.setDouble(4, y)
-				statement.setDouble(5, z)
+				statement.setInt(3, x)
+				statement.setInt(4, y)
+				statement.setInt(5, z)
 				statement.setString(6, mechanic)
 				statement.executeQuery().use { resultSet ->
 					resultSet.next() // Return true if a matching row is found
