@@ -5,13 +5,16 @@ import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.isMechanicOwner
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.removeMechanic
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.setMechanic
 import com.github.yukkimoru.gadgetCraft.economy.EconomyDB.sale
+import org.bukkit.Material
 import org.bukkit.block.Sign
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.ItemStack
 
 class CustomListener : Listener {
 
@@ -104,28 +107,93 @@ class CustomListener : Listener {
 						event.isCancelled = true
 
 						val itemName = lines[1].toString()
-						val price = lines[2].toIntOrNull()
+						val price = lines[2].toIntOrNull() ?: run {return}
 						val buyOrSell = lines[3].toString()
 						when (buyOrSell) {
 							"buy" -> {
-								player.sendMessage("アイテム名:$itemName, 値段:$price の購入ショップを作りました")
-								if(price != null){
+								if(hasPlayerItem(player, ItemStack(Material.DIAMOND),1)) {
+									if(isPlayerFullInventory(player)){
+										player.sendMessage("インベントリがいっぱいです")
+										return
+									}
+									player.sendMessage("${itemName}×1を${price}で購入しました")
+									interactPlayerItem(player, ItemStack(Material.DIAMOND), 1, true)
 									purchase(player.name, price)
+									player.world.playSound(player.location, "ui.toast.in", 0.5f, 1f)
 								}
 							}
 							"sell" -> {
-								player.sendMessage("アイテム名:$itemName, 値段:$price の売却ショップを作りました")
-								if(price != null){
-									sale(player.name, price)
-								}
-							}
-							else -> {
-								player.sendMessage("4行目にはbuyまたはsellを入力してください")
-								return
+								player.sendMessage("${itemName}×1を${price}で売却しました")
+								interactPlayerItem(player, ItemStack(Material.DIAMOND), 1, false)
+								sale(player.name, price)
+								player.world.playSound(player.location, "ui.toast.out", 0.5f, 1f)
 							}
 						}
-
 					}
+				}
+			}
+		}
+	}
+
+
+	private fun hasPlayerItem(player: Player, item: ItemStack, amount: Int): Boolean {
+		val inventory = player.inventory
+		for (i in 0 until inventory.size) {
+			val itemStack = inventory.getItem(i)
+			if (itemStack != null && itemStack.isSimilar(item) && itemStack.amount >= amount) {
+				return true
+			}
+		}
+		return false
+	}
+
+	private fun isPlayerFullInventory(player: Player): Boolean {
+		val inventory = player.inventory
+		for (i in 0 until inventory.size) {
+			val itemStack = inventory.getItem(i)
+			if (itemStack == null) {
+				return false
+			}
+		}
+		return true
+	}
+
+	private fun interactPlayerItem(player: Player, item: ItemStack, amount: Int, addOrRemove: Boolean = true) {
+		val inventory = player.inventory
+		if (addOrRemove) {
+			// アイテムを追加
+			for (i in 0 until inventory.size) {
+				val itemStack = inventory.getItem(i)
+				if (itemStack != null && itemStack.isSimilar(item)) {
+					val newAmount = itemStack.amount + amount
+					if (newAmount <= item.maxStackSize) {
+						itemStack.amount = newAmount
+						inventory.setItem(i, itemStack)
+						return
+					}
+				}
+			}
+			for (i in 0 until inventory.size) {
+				val itemStack = inventory.getItem(i)
+				if (itemStack == null) {
+					item.amount = amount
+					inventory.setItem(i, item)
+					return
+				}
+			}
+		} else {
+			// アイテムを削除
+			for (i in 0 until inventory.size) {
+				val itemStack = inventory.getItem(i)
+				if (itemStack != null && itemStack.isSimilar(item)) {
+					val newAmount = itemStack.amount - amount
+					if (newAmount > 0) {
+						itemStack.amount = newAmount
+						inventory.setItem(i, itemStack)
+					} else {
+						inventory.clear(i)
+					}
+					return
 				}
 			}
 		}
