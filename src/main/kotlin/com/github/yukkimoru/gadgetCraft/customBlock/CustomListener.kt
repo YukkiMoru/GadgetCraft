@@ -11,6 +11,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import kotlin.text.lines
+import kotlin.toString
 
 class CustomListener : Listener {
 
@@ -21,7 +23,7 @@ class CustomListener : Listener {
 		val location = event.block.location
 
 		if (lines[0].equals("shop", ignoreCase = true)) {
-			if(lines[1].isEmpty() || lines[2].isEmpty()){
+			if (lines[1].isEmpty() || lines[2].isEmpty()) {
 				player.sendMessage("2行目はアイテム名と3行目は値段")
 				return
 			}
@@ -31,12 +33,17 @@ class CustomListener : Listener {
 				player.sendMessage("3行目には数値を入力してください")
 				return
 			}
-			if(0 > price){
+			if (0 > price) {
 				player.sendMessage("3行目には0以上の数値を入力してください")
 				return
 			}
-			player.sendMessage("アイテム名:"+itemName+","+"値段:"+price+"のショップを作りました")
+			player.sendMessage("アイテム名:" + itemName + "," + "値段:" + price + "のショップを作りました")
 			setMechanic(player.name, "shop", player.world.name.toString(), location.blockX, location.blockY, location.blockZ)
+
+			// Get the block the sign is attached to
+			val attachedBlock = event.block.getRelative((event.block.state.data as org.bukkit.material.Sign).attachedFace)
+			player.sendMessage("看板が付いているブロック: ${attachedBlock.type}")
+
 		}
 	}
 
