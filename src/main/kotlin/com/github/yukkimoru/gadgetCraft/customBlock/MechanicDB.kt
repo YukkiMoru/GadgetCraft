@@ -3,12 +3,9 @@ package com.github.yukkimoru.gadgetCraft.customBlock
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.PreparedStatement
 import java.sql.SQLException
-import java.util.UUID
 
-
-object MechanicDatabase {
+object MechanicDB {
 	private const val DB_URL = "jdbc:sqlite:plugins/GadgetCraft/Mechanic.db"
 	private var connection: Connection? = null
 
@@ -43,87 +40,78 @@ object MechanicDatabase {
 
 	private fun createTableMechanic() {
 		val sql = """
-        CREATE TABLE IF NOT EXISTS BlockGimmicks (
-            uuid TEXT PRIMARY KEY,
-            Mechanics TEXT,
-            world TEXT,
-            x REAL,
-            y REAL,
-            z REAL
-        )
-    """.trimIndent()
+            CREATE TABLE IF NOT EXISTS BlockGimmicks (
+                player TEXT,
+                mechanics TEXT,
+                world TEXT,
+                x REAL,
+                y REAL,
+                z REAL,
+                PRIMARY KEY (x, y, z)
+            )
+        """.trimIndent()
 		executeUpdate(sql)
 	}
 
 	@Synchronized
-	fun setMechanics(uuid: UUID, mechanic: String, world: String, x: Double, y: Double, z: Double) {
+	fun setMechanics(player: String, mechanic: String, world: String, x: Double, y: Double, z: Double) {
 		val sql = """
-        INSERT INTO BlockGimmicks (uuid, Mechanics, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)
-        ON CONFLICT(uuid) DO UPDATE SET Mechanics = excluded.Mechanics, world = excluded.world, x = excluded.x, y = excluded.y, z = excluded.z
+        INSERT INTO BlockGimmicks (player, mechanics, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(x, y, z) DO UPDATE SET player = excluded.player, mechanics = excluded.mechanics, world = excluded.world
     """.trimIndent()
 		try {
-			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
-			statement.setString(2, mechanic)
-			statement.setString(3, world)
-			statement.setDouble(4, x)
-			statement.setDouble(5, y)
-			statement.setDouble(6, z)
-			statement.executeUpdate()
+			connection?.prepareStatement(sql)?.use { statement ->
+				statement.setString(1, player)
+				statement.setString(2, mechanic)
+				statement.setString(3, world)
+				statement.setDouble(4, x)
+				statement.setDouble(5, y)
+				statement.setDouble(6, z)
+				statement.executeUpdate()
+			}
 		} catch (e: SQLException) {
 			e.printStackTrace()
 		}
 	}
 
 	@Synchronized
-	fun removeMechanics(uuid: UUID, mechanic: String, world: String, x: Double, y: Double, z: Double) {
+	fun removeMechanics(player: String, mechanic: String, world: String, x: Double, y: Double, z: Double) {
 		val sql = """
-        DELETE FROM BlockGimmicks WHERE uuid = ? AND Mechanics = ? AND world = ? AND x = ? AND y = ? AND z = ?
-    """.trimIndent()
+            DELETE FROM BlockGimmicks WHERE player = ? AND mechanics = ? AND world = ? AND x = ? AND y = ? AND z = ?
+        """.trimIndent()
 		try {
-			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
-			statement.setString(2, mechanic)
-			statement.setString(3, world)
-			statement.setDouble(4, x)
-			statement.setDouble(5, y)
-			statement.setDouble(6, z)
-			statement.executeUpdate()
+			connection?.prepareStatement(sql)?.use { statement ->
+				statement.setString(1, player)
+				statement.setString(2, mechanic)
+				statement.setString(3, world)
+				statement.setDouble(4, x)
+				statement.setDouble(5, y)
+				statement.setDouble(6, z)
+				statement.executeUpdate()
+			}
 		} catch (e: SQLException) {
 			e.printStackTrace()
 		}
 	}
 
 	@Synchronized
-	fun getMechanics(uuid: UUID): String {
-		val sql = "SELECT Mechanics FROM BlockGimmicks WHERE uuid = ?"
-		return try {
-			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
-			val resultSet = statement.executeQuery()
-			if (resultSet.next()) resultSet.getString("BlockGimmicks") else ""
-		} catch (e: SQLException) {
-			e.printStackTrace()
-			""
-		}
-	}
-
-	@Synchronized
-	fun isMechanicOwner(uuid: UUID, mechanic: String, world: String, x: Double, y: Double, z: Double): Boolean {
+	fun isMechanicOwner(player: String, mechanic: String, world: String, x: Double, y: Double, z: Double): Boolean {
 		val sql = """
-        SELECT Mechanics FROM BlockGimmicks 
-        WHERE uuid = ? AND world = ? AND x = ? AND y = ? AND z = ? AND Mechanics = ?
+        SELECT mechanics FROM BlockGimmicks
+        WHERE player = ? AND world = ? AND x = ? AND y = ? AND z = ? AND mechanics = ?
     """.trimIndent()
 		return try {
-			val statement: PreparedStatement = connection!!.prepareStatement(sql)
-			statement.setString(1, uuid.toString())
-			statement.setString(2, world)
-			statement.setDouble(3, x)
-			statement.setDouble(4, y)
-			statement.setDouble(5, z)
-			statement.setString(6, mechanic)
-			val resultSet = statement.executeQuery()
-			resultSet.next() // 一致する行があれば true を返す
+			connection?.prepareStatement(sql)?.use { statement ->
+				statement.setString(1, player)
+				statement.setString(2, world)
+				statement.setDouble(3, x)
+				statement.setDouble(4, y)
+				statement.setDouble(5, z)
+				statement.setString(6, mechanic)
+				statement.executeQuery().use { resultSet ->
+					resultSet.next() // Return true if a matching row is found
+				}
+			} ?: false
 		} catch (e: SQLException) {
 			e.printStackTrace()
 			false

@@ -6,7 +6,7 @@ import com.github.yukkimoru.gadgetCraft.items.ExplosiveSword
 import com.github.yukkimoru.gadgetCraft.commands.GCCommand
 import com.github.yukkimoru.gadgetCraft.commands.gui.GUIReceiver
 import com.github.yukkimoru.gadgetCraft.customBlock.CustomListener
-import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDatabase
+import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB
 import org.bukkit.inventory.Inventory
 import java.util.*
 
@@ -19,7 +19,7 @@ class GadgetCraft : JavaPlugin() {
     override fun onEnable() {
         // データベースの初期化
         EconomyDB.connect()
-        MechanicDatabase.connect()
+        MechanicDB.connect()
 
         // プラグインのスタートロジック
         server.pluginManager.registerEvents(ExplosiveSword.getInstance(this), this)
@@ -31,6 +31,6 @@ class GadgetCraft : JavaPlugin() {
     override fun onDisable() {
         // プラグインのシャットダウンロジック
         EconomyDB.disconnect()
-        MechanicDatabase.disconnect()
+        MechanicDB.disconnect()
     }
 }

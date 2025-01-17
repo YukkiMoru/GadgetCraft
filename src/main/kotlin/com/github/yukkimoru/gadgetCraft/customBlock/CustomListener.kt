@@ -1,14 +1,13 @@
 package com.github.yukkimoru.gadgetCraft.customBlock
 
-import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDatabase.isMechanicOwner
-import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDatabase.removeMechanics
-import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDatabase.setMechanics
+import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.isMechanicOwner
+import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.removeMechanics
+import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.setMechanics
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
@@ -22,8 +21,7 @@ class CustomListener : Listener {
 
 		if (lines[0].equals("shop", ignoreCase = true)) {
 			player.sendMessage("特定の文字が入力されました！")
-
-			setMechanics(player.uniqueId, "shop", player.world.toString(), location.x, location.y, location.z)
+			setMechanics(player.name, "shop", player.world.toString(), location.x, location.y, location.z)
 		}
 	}
 
@@ -36,13 +34,13 @@ class CustomListener : Listener {
 			val lines = sign.lines
 			val location = block.location
 			if (lines[0].equals("shop", ignoreCase = true)) {
-				if(isMechanicOwner(player.uniqueId, "shop", player.world.toString(), location.x, location.y, location.z) || player.isOp) {
+				if(isMechanicOwner(player.name, "shop", player.world.toString(), location.x, location.y, location.z) || player.isOp) {
 					player.sendMessage("特定の文字が入力された看板を破壊しました")
 				} else {
 					player.sendMessage("看板を破壊する権限がありません")
 					event.isCancelled = true
 				}
-				removeMechanics(player.uniqueId, "shop", player.world.toString(), location.x, location.y, location.z)
+				removeMechanics(player.name, "shop", player.world.toString(), location.x, location.y, location.z)
 			}
 		}
 	}
@@ -54,17 +52,15 @@ class CustomListener : Listener {
 			if (block != null && block.state is Sign) {
 				val player = event.player
 				val location = block.location
-				if(isMechanicOwner(player.uniqueId, "shop", player.world.toString(), location.x, location.y, location.z)){
-					event.isCancelled = true
-					player.sendMessage("別のオーナーがいるため、看板を編集する権限がありません")
+				val sign = block.state as Sign
+				val lines = sign.lines
+				if (lines[0].equals("shop", ignoreCase = true)) {
+					if(isMechanicOwner(player.name, "shop", player.world.toString(), location.x, location.y, location.z)){
+						event.isCancelled = true
+						player.sendMessage("別のオーナーがいるため、看板を編集する権限がありません")
+					}
 				}
 			}
 		}
-	}
-
-	@EventHandler
-	fun onBlockPlace(event: BlockPlaceEvent) {
-		val player = event.player
-		val block = event.block
 	}
 }
