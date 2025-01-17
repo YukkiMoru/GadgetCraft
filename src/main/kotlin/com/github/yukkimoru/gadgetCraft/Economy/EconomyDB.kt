@@ -87,4 +87,12 @@ object EconomyDB {
 			e.printStackTrace()
 		}
 	}
+
+	fun purchaseItem(player: String, price: Int) {
+		val uuid = UUID.fromString(player)
+		val balance = getBalance(uuid)
+		if (balance >= price) {
+			setBalance(uuid, balance - price)
+		}
+	}
 }
