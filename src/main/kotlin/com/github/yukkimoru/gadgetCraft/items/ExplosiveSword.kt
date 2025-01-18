@@ -1,6 +1,6 @@
 package com.github.yukkimoru.gadgetCraft.items
 
-import com.github.yukkimoru.gadgetCraft.itemLib.Functions
+import com.github.yukkimoru.gadgetCraft.itemLib.BukkitFunctions
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -21,7 +21,7 @@ class ExplosiveSword private constructor(plugin: JavaPlugin) : Listener {
 		}
 	}
 
-	private val functions = Functions(plugin)
+	private val functions = BukkitFunctions(plugin)
 	private var isHoldItem: Boolean = false
 	private var isCooldown: Boolean = false
 	private val debugMode: Boolean = false

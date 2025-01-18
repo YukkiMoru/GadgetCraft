@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.github.yukkimoru.gadgetCraft.customBlock
 
 import com.github.yukkimoru.gadgetCraft.customBlock.MechanicDB.isMechanicOwner

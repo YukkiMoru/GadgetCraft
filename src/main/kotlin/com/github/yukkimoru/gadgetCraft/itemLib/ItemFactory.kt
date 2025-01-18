@@ -1,7 +1,8 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION") // Item NBT API Plugins の使用による警告を抑制
 
 package com.github.yukkimoru.gadgetCraft.itemLib
 
+import com.github.yukkimoru.gadgetCraft.itemLib.DisplayFunctions.getInfo
 import de.tr7zw.nbtapi.NBTItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -64,10 +65,10 @@ object ItemFactory {
 
 		val itemStack = ItemStack(itemData.material, 1) // Assuming amount is 1
 		val itemMeta = itemStack.itemMeta
-		itemMeta?.setDisplayName("§r${RarityUtil.getInfo(itemData.rarity).section}§l${itemData.name}")
+		itemMeta?.setDisplayName("§r${getInfo(itemData.rarity).section}§l${itemData.name}")
 
 		itemMeta?.let {
-			it.lore = itemData.lore + RarityUtil.getInfo(itemData.rarity).name
+			it.lore = itemData.lore + getInfo(itemData.rarity).name
 		}
 
 		// Add custom model data if provide
